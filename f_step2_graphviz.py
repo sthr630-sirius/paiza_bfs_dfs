@@ -1,7 +1,12 @@
+from my_graphviz import indirected_graph
 from collections import deque
 
 n, m = map(int, input().split())
 g = [[] * n for _ in range(n)]
+"""
+graphviz用
+"""
+gg = [[] * n for _ in range(n)]
 
 for _ in range(m):
     a, b = map(int, input().split())
@@ -9,6 +14,11 @@ for _ in range(m):
     b -= 1
     g[a].append(b)
     g[b].append(a)
+
+    """
+    graphviz用にedgeの重複を省略
+    """
+    gg[a].append(b)
 
 is_visited = [False] * n
 color = ["white"] * n
@@ -25,6 +35,8 @@ for i in range(n):
         nxt_vertices.append(nxt_v)
         color[nxt_v] = "blue"
         is_visited[nxt_v] = True
+        print(f"out graph paint @{nxt_v}")
+        indirected_graph.OutGraph(gg, color, -1)
 
         while nxt_vertices:
             now_v = nxt_vertices.popleft()
@@ -37,6 +49,12 @@ for i in range(n):
                         color[nxt_v] = "red"
                     else:
                         color[nxt_v] = "blue"
+
+                    """
+                    色塗りの遷移をgraphvizを利用して可視化
+                    """
+                    print(f"out graph paint @{nxt_v}")
+                    indirected_graph.OutGraph(gg, color, now_v)
 
 for i in range(n):
     if g[i]:
